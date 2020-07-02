@@ -1,4 +1,8 @@
 image: docker:stable
+
+
+
+
 stages:
   - Build image
   - Run image 
