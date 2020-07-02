@@ -28,7 +28,7 @@ docker test:
   before_script:
   - apk add --update curl python && rm -vf /var/cache/apk/*
   script:
-  - if [ "$(curl -X GET http://172.18.0.1:8000/health)" = "ok" ]; then echo "test OK"; exit 0; else echo "test KO"; exit 1; fi
+  - if [ "$(curl -X GET http://172.19.0.1:8000/health)" = "ok" ]; then echo "test OK"; exit 0; else echo "test KO"; exit 1; fi
 
 docker push:
   stage: Push image
