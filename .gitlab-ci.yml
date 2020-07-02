@@ -17,10 +17,11 @@ docker run:
   before_script:
   - docker rm -vf battlegame || echo "containers battlegame delete"
   - docker rm -vf dbgame || echo "containers dbgame delete"
-  - apk add --no-cache curl jq python3 py3-pip
+  - apk add --no-cache py-pip python-dev libffi-dev openssl-dev gcc libc-dev make
   - pip install docker-compose
   script:
   - docker-compose up -d
+  - sleep 5s
 
 docker test:
   stage: Test image
