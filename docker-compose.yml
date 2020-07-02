@@ -1,0 +1,39 @@
+version: '3'
+services:
+  dbgame:
+    container_name: dbgame
+    image: mysql:5.7
+    volumes:
+       - data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: "rootpwdgame"
+      MYSQL_DATABASE: "battleboat"
+      MYSQL_USER: "battleuser"
+      MYSQL_PASSWORD: "battlepass"
+    networks:
+      - network_game
+
+  battlegame:
+    container_name: battlegame
+    image: barry2abdulrahim/fake-backend-gitlab_ci:version_1
+    depends_on:
+      - dbgame
+    ports:
+      - 8000:3000
+    volumes:
+      - /home/admin/gitlab-ci/battleboat:/etc/backend/static
+    restart: always
+    environment:
+      DATABASE_HOST: "dbgame"
+      DATABASE_PORT: 3306
+      DATABASE_USER: "battleuser"
+      DATABASE_PASSWORD: "battlepass"
+      DATABASE_NAME: "battleboat"
+    networks:
+      - network_game
+
+volumes:
+  data:
+networks:
+  network_game:

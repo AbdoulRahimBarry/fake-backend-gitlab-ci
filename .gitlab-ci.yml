@@ -1,0 +1,47 @@
+image: docker:stable
+stages:
+  - Build image
+  - Run image 
+  - Test image
+  - Clean containers
+  - Push image
+  
+docker build:
+  stage: Build image
+  script:
+  - docker info
+  - docker build -t barry2abdulrahim/fake-backend-gitlab_ci:version_1 ./fake-backend || echo "build seccesful"
+
+docker run:
+  stage: Run image
+  before_script:
+  - docker rm -vf battlegame || echo "containers battlegame delete"
+  - docker rm -vf dbgame || echo "containers dbgame delete"
+  - apk add python python-dev py-pip build-base libffi-dev openssl-dev
+  - pip install docker-compose
+  script:
+  - docker-compose up -d
+
+docker test:
+  stage: Test image
+  before_script:
+  - apk add --update curl python && rm -vf /var/cache/apk/*
+  script:
+  - if [ "$(curl -X GET http://172.18.0.1:8000/health)" = "ok" ]; then echo "test OK"; exit 0; else echo "test KO"; exit 1; fi
+
+docker push:
+  stage: Push image
+  only:
+  - master
+  script:
+  - docker login -u $docker_login -p $docker_password
+  - docker push barry2abdulrahim/fake-backend-gitlab_ci:version_1
+
+docker clean:
+  stage: Clean containers
+  before_script:
+  - apk add python python-dev py-pip build-base libffi-dev openssl-dev
+  - pip install docker-compose
+  script:
+  - sleep 30s
+  - docker-compose down || echo "delete containers and image"
