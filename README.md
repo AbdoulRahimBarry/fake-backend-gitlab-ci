@@ -1,4 +1,4 @@
-figuration de gitlab_ci: 
+figuration de gitlab-ci: 
 	* definir un password par exemple xyz qui serra un password root
 	* puis se connecté user : root et password: xyx
 2- Crée un utilisateur: settings > admin area > new user
